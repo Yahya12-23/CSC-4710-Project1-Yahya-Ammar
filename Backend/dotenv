@@ -1,0 +1,8 @@
+# Make a local copy named .env, then replace SESSION_SECRET with a random value.
+PORT=5050
+HOST=localhost
+DB_PORT=3306
+DB_USER=root
+PASSWORD=
+DATABASE=web_app
+SESSION_SECRET=replace_this_with_a_long_random_local_secret

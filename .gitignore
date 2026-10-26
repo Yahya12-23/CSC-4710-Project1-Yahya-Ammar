@@ -1,0 +1,6 @@
+# Never commit DB passwords or session secrets
+.env
+**/.env
+**/node_modules/
+.DS_Store
+*.log

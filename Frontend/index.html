@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Database Project 1 - user registration, login and searches" />
+  <title>Project 1 | User Database</title>
+  <link rel="stylesheet" href="stylesheet.css" />
+  <script src="index.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell header-content">
+      <a href="index.html" class="brand"><span class="brand-icon">DB</span> User Database</a>
+      <div class="header-right"><span class="pill">Project 1 · Requirements 1–5</span><span id="auth-indicator" class="auth-indicator">Not signed in</span></div>
+    </div>
+  </header>
+  <main class="shell">
+    <div class="page-title">
+      <div><p class="eyebrow">NODE.JS · EXPRESS · MYSQL</p><h1>User Management</h1><p>Register an account, sign in, and search records stored in MySQL.</p></div>
+    </div>
+
+    <section class="account-grid" aria-label="Account forms">
+      <article class="card">
+        <div class="card-heading"><span class="number">01</span><div><h2>Register a user</h2><p>Requirement 1 · Add a new account to the database.</p></div></div>
+        <form id="register-form" autocomplete="on">
+          <div class="fields two-col">
+            <label>Username <input name="username" maxlength="50" minlength="3" pattern="[A-Za-z0-9_]{3,50}" placeholder="e.g. john" autocomplete="username" required /></label>
+            <label>Password <input name="password" type="password" minlength="8" placeholder="8+ characters" autocomplete="new-password" required /></label>
+            <label>First name <input name="firstname" maxlength="50" placeholder="John" autocomplete="given-name" required /></label>
+            <label>Last name <input name="lastname" maxlength="50" placeholder="Doe" autocomplete="family-name" required /></label>
+            <label>Age <input name="age" type="number" min="0" max="120" step="1" placeholder="25" required /></label>
+            <label>Salary ($) <input name="salary" type="number" min="0" max="9999999999.99" step="0.01" placeholder="52000.00" required /></label>
+          </div>
+          <button type="submit" class="button primary">Create account</button>
+          <p id="register-status" class="feedback" aria-live="polite"></p>
+        </form>
+      </article>
+
+      <article class="card">
+        <div class="card-heading"><span class="number">02</span><div><h2>Sign in</h2><p>Requirement 2 · Verify credentials without SQL injection.</p></div></div>
+        <form id="login-form">
+          <div class="fields">
+            <label>Username <input name="username" maxlength="50" placeholder="Your username" autocomplete="username" required /></label>
+            <label>Password <input name="password" type="password" placeholder="Your password" autocomplete="current-password" required /></label>
+          </div>
+          <button type="submit" class="button primary">Sign in</button>
+          <p id="login-status" class="feedback" aria-live="polite"></p>
+        </form>
+        <div class="login-note"><strong>Security:</strong> Passwords are stored as bcrypt hashes. The API uses prepared SQL statements and a server-side session.</div>
+        <div class="signed-in-panel" id="signed-in-panel" hidden>
+          <span id="welcome-user"></span>
+          <button type="button" class="button secondary" id="logout-button">Sign out</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="card search-section" id="search-workspace" hidden>
+      <div class="card-heading"><span class="number">03–05</span><div><h2>Search users</h2><p>Search with a first/last name, username (user ID), or salary range.</p></div></div>
+      <div class="search-grid">
+        <form id="search-name-form" class="search-panel">
+          <h3>03 · Search by name</h3><p>Enter first name, last name, or both; partial matches work.</p>
+          <div class="fields two-col">
+            <label>First name <input name="firstname" maxlength="50" placeholder="e.g. Joh" /></label>
+            <label>Last name <input name="lastname" maxlength="50" placeholder="e.g. Doe" /></label>
+          </div>
+          <button class="button outline" type="submit">Search names</button>
+        </form>
+        <form id="search-id-form" class="search-panel">
+          <h3>04 · Search by user ID</h3><p>The username is the unique ID in this project.</p>
+          <div class="fields"><label>Username <input name="username" maxlength="50" placeholder="e.g. john" required /></label></div>
+          <button class="button outline" type="submit">Search ID</button>
+        </form>
+        <form id="search-salary-form" class="search-panel">
+          <h3>05 · Search by salary</h3><p>Find users between two salary values, inclusive.</p>
+          <div class="fields two-col">
+            <label>Minimum ($) <input name="min" type="number" min="0" step="0.01" placeholder="30000" required /></label>
+            <label>Maximum ($) <input name="max" type="number" min="0" step="0.01" placeholder="80000" required /></label>
+          </div>
+          <button class="button outline" type="submit">Search salary</button>
+        </form>
+      </div>
+      <div class="results-heading"><h3>Search results <span id="result-count" class="count">0</span></h3><p id="results-status" aria-live="polite">Run a search to see matching users.</p></div>
+      <div class="table-wrap">
+        <table aria-label="Search results"><thead><tr><th>User ID</th><th>First name</th><th>Last name</th><th>Age</th><th>Salary</th><th>Registered</th><th>Last sign-in</th></tr></thead>
+          <tbody id="results-body"><tr><td colspan="7" class="empty">No search performed yet.</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="locked-card" id="locked-message"><span class="lock-symbol">🔒</span><div><strong>Search is available after sign-in</strong><p>Create an account and sign in to test requirements 3–5.</p></div></section>
+    <footer class="footer"><span>CSC Database Project 1 · First five requirements</span><a href="partner.html">Ammar's tasks (6–10) →</a></footer>
+  </main>
+</body>
+</html>

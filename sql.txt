@@ -1,9 +1,7 @@
--- Project 1: SQL used for REQUIREMENTS 1–5 ONLY.
--- All ? placeholders are bound by mysql2.execute(sql, values) in Node.js.
--- In phpMyAdmin, substitute actual literal test values for ? to test manually.
--- Requirements 6–10 will be added by Ammar before final submission.
+-- Queries for registration, login, and user searches.
+-- Placeholder values are bound with mysql2.execute().
 
--- Database and table setup (also in database/schema.sql):
+-- Database setup
 CREATE DATABASE IF NOT EXISTS web_app
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE web_app;
@@ -21,31 +19,31 @@ CREATE TABLE IF NOT EXISTS Users (
     INDEX idx_users_registerday (registerday)
 );
 
--- 1. Register a user (second placeholder is a bcrypt HASH generated in Node).
+-- Create a user account
 INSERT INTO Users
   (username, password, firstname, lastname, salary, age, registerday, signintime)
 VALUES (?, ?, ?, ?, ?, ?, CURDATE(), NULL);
 
--- 2. Sign in: find the stored hash, compare it with bcrypt in Node.
+-- Retrieve password hash for login
 SELECT username, password FROM Users WHERE username = ?;
--- After SUCCESSFUL password verification only:
+-- Update the last sign-in time
 UPDATE Users SET signintime = NOW() WHERE username = ?;
 
--- 3. Search by first name (partial match).
+-- First name search
 SELECT username, firstname, lastname, salary, age, registerday, signintime
 FROM Users WHERE firstname LIKE ? ORDER BY username;
--- 3. Search by last name (partial match).
+-- Last name search
 SELECT username, firstname, lastname, salary, age, registerday, signintime
 FROM Users WHERE lastname LIKE ? ORDER BY username;
--- 3. Search by BOTH names.
+-- First and last name search
 SELECT username, firstname, lastname, salary, age, registerday, signintime
 FROM Users WHERE firstname LIKE ? AND lastname LIKE ? ORDER BY username;
--- In the real code, placeholders receive '%John%' etc. from the backend.
+-- The backend supplies wildcard patterns for name searches.
 
--- 4. Search by userid (here the username is the primary key).
+-- Find by username
 SELECT username, firstname, lastname, salary, age, registerday, signintime
 FROM Users WHERE username = ?;
 
--- 5. Inclusive salary range (X–Y).
+-- Salary range search
 SELECT username, firstname, lastname, salary, age, registerday, signintime
 FROM Users WHERE salary BETWEEN ? AND ? ORDER BY salary, username;

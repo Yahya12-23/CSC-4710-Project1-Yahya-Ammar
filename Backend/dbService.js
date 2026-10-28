@@ -1,5 +1,4 @@
-// Database queries used by our requirements 1–5.
-// mysql2.execute(sql, values) uses prepared statements to prevent SQL injection.
+// Database queries use prepared statements.
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
@@ -14,7 +13,7 @@ const pool = mysql.createPool({
   dateStrings: true
 });
 
-// Never SELECT password here: search responses must not expose password hashes.
+// Exclude password hashes from search responses.
 const visibleColumns = 'username, firstname, lastname, salary, age, registerday, signintime';
 
 async function registerUser({ username, passwordHash, firstname, lastname, salary, age }) {

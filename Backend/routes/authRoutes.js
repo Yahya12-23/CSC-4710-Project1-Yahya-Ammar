@@ -1,4 +1,3 @@
-// Requirements 1 and 2: registration and sign-in.
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const db = require('../dbService');
@@ -30,12 +29,12 @@ router.post('/login', async (req, res, next) => {
   }
 
   const user = await db.findLoginUser(username);
-  // Do not compare plaintext passwords to stored database values.
+  // Verify the submitted password against the stored hash.
   const valid = user ? await bcrypt.compare(password, user.password) : false;
   if (!valid) return res.status(401).json({ error: 'Invalid username or password.' });
 
   await db.recordSuccessfulSignIn(user.username);
-  // Regenerate session on sign-in to prevent session fixation.
+  // Regenerate the session after login.
   req.session.regenerate(err => {
     if (err) return next(err);
     req.session.user = { username: user.username };

@@ -1,6 +1,6 @@
-# Database Project 1 — Requirements 1–5
+# Database Project 1
 
-This implementation follows the assignment in [shiyonglu/database_javascript/project1](https://github.com/shiyonglu/database_javascript/tree/main/project1). It uses the same frontend/backend separation, but improves the sample with safer authentication and a working login session. It implements **only requirements 1–5**. Requirements 6–10 are reserved for Ammar; see [TEAM_HANDOFF.md](TEAM_HANDOFF.md).
+This implementation follows the assignment in [shiyonglu/database_javascript/project1](https://github.com/shiyonglu/database_javascript/tree/main/project1). It uses the same frontend/backend separation, but improves the sample with safer authentication and a working login session. Yahya implements requirements 1–5. Requirements 6–10 are reserved for Ammar.
 
 ## Implemented features
 

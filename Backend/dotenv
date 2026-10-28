@@ -1,4 +1,4 @@
-# Make a local copy named .env, then replace SESSION_SECRET with a random value.
+# Copy to .env and configure the local database and session secret.
 PORT=5050
 HOST=localhost
 DB_PORT=3306

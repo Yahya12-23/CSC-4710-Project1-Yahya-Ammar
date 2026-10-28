@@ -149,7 +149,3 @@ npm test
 ```
 
 These unit tests validate inputs only and do not need a running MySQL server. Full browser/integration testing requires XAMPP MySQL.
-
-## Submission and Git workflow
-
-Do not push changes to the professor's `shiyonglu` repository. Copy the project into a shared repository that both you and Ammar can edit, with separate feature branches and pull requests. Keep `sql.txt` as the shared file and let Ammar append his statements for requirements 6–10 before submission. Record a demonstration of results and Git operations as required by the professor.

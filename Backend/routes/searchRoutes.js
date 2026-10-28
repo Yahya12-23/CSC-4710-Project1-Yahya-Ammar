@@ -1,4 +1,3 @@
-// Requirements 3, 4, and 5: name, user ID, and salary searches.
 const express = require('express');
 const db = require('../dbService');
 const { textField, validateSalaryRange } = require('../lib/input');
@@ -6,7 +5,7 @@ const { requireAuth } = require('../middleware/auth');
 const router = express.Router();
 router.use(requireAuth);
 
-// Req. 3: search by first name, last name, or both (partial matches).
+// Allow partial matches for first and last names.
 router.get('/name', async (req, res) => {
   const firstname = textField(req.query.firstname);
   const lastname = textField(req.query.lastname);
@@ -20,7 +19,7 @@ router.get('/name', async (req, res) => {
   res.json({ data: users });
 });
 
-// Req. 4: professor uses username as the unique user ID.
+// Username identifies each account.
 router.get('/id', async (req, res) => {
   const username = textField(req.query.username);
   if (!username || username.length > 50) {
@@ -30,7 +29,7 @@ router.get('/id', async (req, res) => {
   res.json({ data: users });
 });
 
-// Req. 5: inclusive salary range (X <= salary <= Y).
+// Include both endpoints of the salary range.
 router.get('/salary', async (req, res) => {
   const result = validateSalaryRange(req.query);
   if (result.error) return res.status(400).json({ error: result.error });

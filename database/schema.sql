@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS Users (
     salary DECIMAL(12,2) NOT NULL,
     age INTEGER NOT NULL,
     registerday DATE NOT NULL,
+    registertime DATETIME NOT NULL,
     signintime DATETIME NULL DEFAULT NULL,
     INDEX idx_users_name (firstname, lastname),
     INDEX idx_users_salary (salary),

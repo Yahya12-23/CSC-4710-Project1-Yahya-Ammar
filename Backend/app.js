@@ -34,7 +34,7 @@ app.use(session({
 
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/users', require('./routes/searchRoutes'));
-app.use('/api/users', require('./routes/partnerRoutes')); // Ammar adds 6–10 separately.
+app.use('/api/users', require('./routes/partnerRoutes')); // Requirements 6–10.
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
 // Convenience: frontend works at http://localhost:5050/ without Apache.

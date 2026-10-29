@@ -1,6 +1,6 @@
-# Database Project 1 — Requirements 1–5
+# Database Project 1 — Requirements 1–10
 
-This implementation follows the assignment in [shiyonglu/database_javascript/project1](https://github.com/shiyonglu/database_javascript/tree/main/project1). It uses the same frontend/backend separation, but improves the sample with safer authentication and a working login session. It implements **only requirements 1–5**. Requirements 6–10 are reserved for Ammar; see [TEAM_HANDOFF.md](TEAM_HANDOFF.md).
+This implementation follows the assignment in [shiyonglu/database_javascript/project1](https://github.com/shiyonglu/database_javascript/tree/main/project1). It uses a shared frontend and backend, with prepared SQL statements and a working login session.
 
 ## Implemented features
 
@@ -11,32 +11,36 @@ This implementation follows the assignment in [shiyonglu/database_javascript/pro
 | 3 | Search by first and/or last name | Two search fields | `GET /api/users/name` | SELECT + LIKE |
 | 4 | Search by user ID (= username) | User ID field | `GET /api/users/id` | SELECT + WHERE |
 | 5 | Search by salary X through Y | Salary range fields | `GET /api/users/salary` | SELECT + BETWEEN |
+| 6 | Search by age range | Minimum and maximum age | `GET /api/users/age` | SELECT + BETWEEN |
+| 7 | Search users registered after a specified user | Username field | `GET /api/users/registered-after` | SELECT + subquery |
+| 8 | Find users who never signed in | Search button | `GET /api/users/never-signed-in` | SELECT + IS NULL |
+| 9 | Search by the same registration day as a specified user | Username field | `GET /api/users/registered-same-day` | SELECT + subquery |
+| 10 | Find users registered today | Search button | `GET /api/users/registered-today` | SELECT + CURDATE |
 
 Backend: Node.js, Express, mysql2, bcryptjs, express-session. Frontend: HTML/CSS/vanilla JavaScript. Database: MySQL or MariaDB from XAMPP.
 
 ## Project folder structure
 
 ```
-Project1_First5/
+Project1/
 ├── Backend/
-│   ├── app.js                    # Start Express, mount both teammates' routes
-│   ├── dbService.js              # Prepared SQL statements, reqs 1–5
+│   ├── app.js                    # Start Express and mount routes
+│   ├── dbService.js              # Prepared SQL statements, reqs 1–10
 │   ├── dotenv                    # Copy to .env; never commit actual .env
 │   ├── package.json
 │   ├── lib/input.js              # Input validation
 │   ├── middleware/auth.js        # Require sign-in for searching
 │   ├── routes/authRoutes.js      # Register/login/logout
 │   ├── routes/searchRoutes.js    # Search reqs 3–5
-│   ├── routes/partnerRoutes.js   # Reserved for Ammar (empty)
+│   ├── routes/partnerRoutes.js   # Search reqs 6–10
 │   └── tests/input.test.js
 ├── Frontend/
 │   ├── index.html                # Registration, login, search forms
 │   ├── index.js                  # fetch(), display results
 │   ├── stylesheet.css
-│   └── partner.html              # Ammar's separate UI area (placeholder)
+│   └── partner.html              # Redirects to the unified application
 ├── database/schema.sql          # Database/table creation
-├── sql.txt                      # SQL statements for reqs 1–5
-└── TEAM_HANDOFF.md              # Merge and API instructions
+└── sql.txt                      # SQL statements for reqs 1–10
 ```
 
 ## Mac setup (XAMPP)
@@ -47,10 +51,10 @@ Open `/Applications/XAMPP/manager-osx.app` (or the XAMPP manager in Applications
 
 ### 2. Place this folder inside Apache's web root (recommended)
 
-Copy this `Project1_First5` folder to:
+Copy this `Project1` folder to:
 
 ```
-/Applications/XAMPP/xamppfiles/htdocs/Project1_First5
+/Applications/XAMPP/xamppfiles/htdocs/Project1
 ```
 
 > In some XAMPP configurations, the web root is elsewhere; check Apache's DocumentRoot. You can also run from any other folder if you prefer Node-only frontend hosting at `http://localhost:5050`.
@@ -64,7 +68,7 @@ Visit `http://localhost/phpmyadmin/` and open the **SQL** tab. Paste and execute
 Open Terminal:
 
 ```bash
-cd /Applications/XAMPP/xamppfiles/htdocs/Project1_First5/Backend
+cd /Applications/XAMPP/xamppfiles/htdocs/Project1/Backend
 cp dotenv .env
 ```
 
@@ -100,7 +104,7 @@ If you see `Cannot connect to MySQL`, verify XAMPP's MySQL server is running, `w
 Either URL should work:
 
 - **Recommended / simpler:** `http://localhost:5050/` (Node serves the HTML/CSS/JS)
-- **Using XAMPP Apache as the professor describes:** `http://localhost/Project1_First5/Frontend/index.html`
+- **Using XAMPP Apache as the professor describes:** `http://localhost/Project1/Frontend/index.html`
 
 Both methods connect to the backend at port `5050`.
 
@@ -113,9 +117,14 @@ Both methods connect to the backend at port `5050`.
 5. **Name search:** Enter `Joh`, `Doe`, or both. Expect `john` in results.
 6. **User ID search:** Enter `john`. Expect exactly the `john` row.
 7. **Salary search:** Enter `50000` and `60000`. Expect `john`. Search `60000` to `70000` and expect 0 rows.
-8. **Refresh:** Reload the page; you should still appear signed in while the session is active.
-9. **Logout:** Click Sign out. Search area should become unavailable until logging in again.
-10. **SQL injection safety check:** Try username `john' OR '1'='1` in the login box. It should **not** authenticate. The SQL query uses bound parameters.
+8. **Age search:** Enter `20` and `30`. Expect `john`. Reverse the bounds or enter a decimal and expect a validation error.
+9. **Registered after:** Enter a username. Expect users whose `registerday` is later than that user's registration day.
+10. **Never signed in:** Register a second account but do not sign in as it. Expect it in the results; signed-in users should not appear.
+11. **Same registration day:** Search using a username. Expect all users sharing that user's `registerday`, including that user.
+12. **Registered today:** Expect all users whose `registerday` equals MySQL's current date (`CURDATE()`).
+13. **Refresh:** Reload the page; you should still appear signed in while the session is active.
+14. **Logout:** Click Sign out. Search area should become unavailable until logging in again.
+15. **SQL injection safety check:** Try username `john' OR '1'='1` in the login box. It should **not** authenticate. The SQL query uses bound parameters.
 
 ## How the request flows
 
@@ -137,7 +146,7 @@ Frontend search form
 
 - This is a **local classroom demonstration**, not a production authentication system. `express-session` defaults to an in-memory session store; a deployed service should use a persistent store, HTTPS with secure cookies, appropriate rate limits and more authorization controls.
 - Search users are viewable by anyone who can sign in; that access model follows the assignment and is not appropriate for private real-world salary data.
-- Registration date is stored as `DATE`, not a precise timestamp. Discuss exact-time registration comparisons with Ammar if requirement 7 needs them.
+- Registration date is stored as `DATE`, not a precise timestamp, so requirement 7 compares calendar days. Requirement 10 uses the MySQL server's current date.
 - The SQL in `sql.txt` uses `?` placeholders because they are sent through `mysql2.execute()`. To test SQL in phpMyAdmin directly, manually substitute example quoted values.
 
 ## Running tests
@@ -152,4 +161,4 @@ These unit tests validate inputs only and do not need a running MySQL server. Fu
 
 ## Submission and Git workflow
 
-Do not push changes to the professor's `shiyonglu` repository. Copy the project into a shared repository that both you and Ammar can edit, with separate feature branches and pull requests. Keep `sql.txt` as the shared file and let Ammar append his statements for requirements 6–10 before submission. Record a demonstration of results and Git operations as required by the professor.
+Do not push changes to the professor's `shiyonglu` repository. Use your shared project repository for team development. `sql.txt` contains the SQL for all ten requirements. Record a demonstration of results and Git operations as required by the professor.

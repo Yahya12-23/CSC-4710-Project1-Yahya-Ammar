@@ -1,4 +1,4 @@
-// Database queries used by our requirements 1–5.
+// Database queries used by our requirements 1–10.
 // mysql2.execute(sql, values) uses prepared statements to prevent SQL injection.
 const mysql = require('mysql2/promise');
 require('dotenv').config();
@@ -66,7 +66,51 @@ async function searchBySalary(min, max) {
   return rows;
 }
 
+async function searchByAgeRange(min, max) {
+  const [rows] = await pool.execute(
+    `SELECT ${visibleColumns} FROM Users WHERE age BETWEEN ? AND ? ORDER BY age, username`,
+    [min, max]
+  );
+  return rows;
+}
+
+async function searchRegisteredAfter(username) {
+  const [rows] = await pool.execute(
+    `SELECT ${visibleColumns} FROM Users
+     WHERE registerday > (SELECT registerday FROM Users WHERE username = ?)
+     ORDER BY registerday, username`,
+    [username]
+  );
+  return rows;
+}
+
+async function searchNeverSignedIn() {
+  const [rows] = await pool.execute(
+    `SELECT ${visibleColumns} FROM Users WHERE signintime IS NULL ORDER BY username`
+  );
+  return rows;
+}
+
+async function searchRegisteredSameDay(username) {
+  const [rows] = await pool.execute(
+    `SELECT ${visibleColumns} FROM Users
+     WHERE registerday = (SELECT registerday FROM Users WHERE username = ?)
+     ORDER BY username`,
+    [username]
+  );
+  return rows;
+}
+
+async function searchRegisteredToday() {
+  const [rows] = await pool.execute(
+    `SELECT ${visibleColumns} FROM Users WHERE registerday = CURDATE() ORDER BY username`
+  );
+  return rows;
+}
+
 module.exports = {
   pool, registerUser, findLoginUser, recordSuccessfulSignIn,
-  searchByName, searchByUsername, searchBySalary
+  searchByName, searchByUsername, searchBySalary, searchByAgeRange,
+  searchRegisteredAfter, searchNeverSignedIn, searchRegisteredSameDay,
+  searchRegisteredToday
 };

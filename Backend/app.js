@@ -16,7 +16,7 @@ if (process.env.SESSION_SECRET.startsWith('replace_this')) {
 const app = express();
 const port = Number(process.env.PORT || 5050);
 
-// Supports either Node-hosted frontend (:5050) or XAMPP Apache (localhost).
+// Accept local requests from Apache and Express.
 const allowedOrigins = [
   'http://localhost', 'http://localhost:80', 'http://localhost:5050',
   'http://127.0.0.1', 'http://127.0.0.1:80', 'http://127.0.0.1:5050'
@@ -34,10 +34,10 @@ app.use(session({
 
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/users', require('./routes/searchRoutes'));
-app.use('/api/users', require('./routes/partnerRoutes')); // Requirements 6–10.
+app.use('/api/users', require('./routes/partnerRoutes'));
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
-// Convenience: frontend works at http://localhost:5050/ without Apache.
+// Serve the frontend from Express.
 app.use(express.static(path.join(__dirname, '..', 'Frontend')));
 
 app.use((err, _req, res, _next) => {
@@ -45,7 +45,7 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: 'An internal server error occurred.' });
 });
 
-// Check DB connection before starting the app, making setup errors obvious.
+// Check the database connection before listening.
 (async () => {
   try {
     await pool.query('SELECT 1');

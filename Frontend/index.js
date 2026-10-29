@@ -1,6 +1,7 @@
 // Frontend for requirements 1–10. No React required.
 // If served by XAMPP Apache, API calls go to Node on port 5050.
 // If served by Node at :5050, API calls use the same origin.
+// Route requests through Express, whether the frontend runs on Apache or Node.
 const API_BASE = window.location.port === '5050' ? '' : 'http://localhost:5050';
 const $ = (selector) => document.querySelector(selector);
 
@@ -53,7 +54,7 @@ function renderUsers(users, description) {
   }
   for (const u of users) {
     const row = table.insertRow();
-    // textContent prevents malicious database values becoming executable HTML.
+    // Render database values as text.
     const values = [
       u.username, u.firstname, u.lastname, u.age, formatSalary(u.salary),
       u.registerday || '—', u.signintime || 'Never'
@@ -166,6 +167,7 @@ $('#search-registered-today-form').addEventListener('submit', async (event) => {
 });
 
 // Restore login UI on refresh while the server-side session is active.
+// Restore the active session after a refresh.
 (async () => {
   try {
     const result = await api('/api/auth/me');

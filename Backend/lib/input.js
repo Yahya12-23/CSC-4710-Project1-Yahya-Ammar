@@ -1,4 +1,3 @@
-// Small, dependency-free validation helpers used by the API and its unit tests.
 
 function textField(value) {
   return typeof value === 'string' ? value.trim() : '';

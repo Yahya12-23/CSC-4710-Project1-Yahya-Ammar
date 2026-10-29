@@ -1,6 +1,6 @@
-# Database Project 1 — Requirements 1–10
+# Database Project 1
 
-This implementation follows the assignment in [shiyonglu/database_javascript/project1](https://github.com/shiyonglu/database_javascript/tree/main/project1). It uses a shared frontend and backend, with prepared SQL statements and a working login session.
+A user registration and search application built with Node.js, Express, MySQL, and JavaScript.
 
 ## Implemented features
 
@@ -22,10 +22,10 @@ Backend: Node.js, Express, mysql2, bcryptjs, express-session. Frontend: HTML/CSS
 ## Project folder structure
 
 ```
-Project1/
+CSC-4710-Project1-Yahya-the team/
 ├── Backend/
-│   ├── app.js                    # Start Express and mount routes
-│   ├── dbService.js              # Prepared SQL statements, reqs 1–10
+│   ├── app.js                    # Express server and routes
+│   ├── dbService.js              # Database queries
 │   ├── dotenv                    # Copy to .env; never commit actual .env
 │   ├── package.json
 │   ├── lib/input.js              # Input validation
@@ -49,7 +49,7 @@ Project1/
 
 Open `/Applications/XAMPP/manager-osx.app` (or the XAMPP manager in Applications), open **Manage Servers**, and start **MySQL Database** and **Apache Web Server**. Visit `http://localhost/` and `http://localhost/phpmyadmin/` to confirm Apache and phpMyAdmin are running.
 
-### 2. Place this folder inside Apache's web root (recommended)
+### 2. Optional Apache setup
 
 Copy this `Project1` folder to:
 
@@ -68,11 +68,11 @@ Visit `http://localhost/phpmyadmin/` and open the **SQL** tab. Paste and execute
 Open Terminal:
 
 ```bash
-cd /Applications/XAMPP/xamppfiles/htdocs/Project1/Backend
+cd /Applications/XAMPP/xamppfiles/htdocs/CSC-4710-Project1-Yahya-the team/Backend
 cp dotenv .env
 ```
 
-Edit `Backend/.env` in VS Code. `DB_USER=root` and an empty `PASSWORD` may work on a default local XAMPP installation; replace them with your actual XAMPP MySQL credentials if needed. Generate a real local session secret using:
+Edit `Backend/.env` in your editor. `DB_USER=root` and an empty `PASSWORD` may work on a default local XAMPP installation; replace them with your actual XAMPP MySQL credentials if needed. Generate a real local session secret using:
 
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
@@ -108,7 +108,7 @@ Either URL should work:
 
 Both methods connect to the backend at port `5050`.
 
-## Step-by-step test plan
+## Manual test plan
 
 1. **Register:** Enter username `john`, password `ExamplePassword123!`, first name `John`, last name `Doe`, age `25`, salary `52000`. Check phpMyAdmin; `Users` has one row and `password` contains a hash, not `ExamplePassword123!`.
 2. **Duplicate username:** Try registering `john` again. Expect a clear "username already taken" error.
@@ -146,7 +146,7 @@ Frontend search form
 
 - This is a **local classroom demonstration**, not a production authentication system. `express-session` defaults to an in-memory session store; a deployed service should use a persistent store, HTTPS with secure cookies, appropriate rate limits and more authorization controls.
 - Search users are viewable by anyone who can sign in; that access model follows the assignment and is not appropriate for private real-world salary data.
-- Registration date is stored as `DATE`, not a precise timestamp, so requirement 7 compares calendar days. Requirement 10 uses the MySQL server's current date.
+- Registration date is stored as `DATE`, not a precise timestamp. Use a timestamp column if exact registration-time comparisons are needed.
 - The SQL in `sql.txt` uses `?` placeholders because they are sent through `mysql2.execute()`. To test SQL in phpMyAdmin directly, manually substitute example quoted values.
 
 ## Running tests
@@ -158,7 +158,3 @@ npm test
 ```
 
 These unit tests validate inputs only and do not need a running MySQL server. Full browser/integration testing requires XAMPP MySQL.
-
-## Submission and Git workflow
-
-Do not push changes to the professor's `shiyonglu` repository. Use your shared project repository for team development. `sql.txt` contains the SQL for all ten requirements. Record a demonstration of results and Git operations as required by the professor.

@@ -34,7 +34,7 @@ app.use(session({
 
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/users', require('./routes/searchRoutes'));
-app.use('/api/users', require('./routes/partnerRoutes'));
+app.use('/api/users', require('./routes/ageDateRoutes'));
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
 // Serve the frontend from Express.

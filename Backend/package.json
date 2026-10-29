@@ -2,7 +2,7 @@
   "name": "database-project1",
   "version": "1.0.0",
   "private": true,
-  "description": "User registration, login, and searches (requirements 1–10)",
+  "description": "User registration, login, and user searches",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

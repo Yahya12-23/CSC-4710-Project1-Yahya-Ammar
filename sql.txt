@@ -1,8 +1,5 @@
--- Project 1: SQL used for REQUIREMENTS 1–10.
--- All ? placeholders are bound by mysql2.execute(sql, values) in Node.js.
--- In phpMyAdmin, substitute actual literal test values for ? to test manually.
--- Queries for registration, login, and user searches.
--- Placeholder values are bound with mysql2.execute().
+-- SQL used by the site. The ? marks are filled in by mysql2 in Node.js.
+-- To try a query in phpMyAdmin, replace each ? with a real value.
 
 -- Database setup
 CREATE DATABASE IF NOT EXISTS web_app
@@ -51,26 +48,26 @@ FROM Users WHERE username = ?;
 SELECT username, firstname, lastname, salary, age, registerday, signintime
 FROM Users WHERE salary BETWEEN ? AND ? ORDER BY salary, username;
 
--- 6. Inclusive age range (minimum age through maximum age).
+-- Age range search
 SELECT username, firstname, lastname, salary, age, registerday, signintime
 FROM Users WHERE age BETWEEN ? AND ? ORDER BY age, username;
 
--- 7. Find users who registered after the specified user's registration day.
+-- Users who registered after a given user
 SELECT username, firstname, lastname, salary, age, registerday, signintime
 FROM Users
 WHERE registerday > (SELECT registerday FROM Users WHERE username = ?)
 ORDER BY registerday, username;
 
--- 8. Find users who have never successfully signed in.
+-- Users who never signed in
 SELECT username, firstname, lastname, salary, age, registerday, signintime
 FROM Users WHERE signintime IS NULL ORDER BY username;
 
--- 9. Find users registered on the same day as the specified user (including that user).
+-- Users who registered the same day as a given user (includes that user)
 SELECT username, firstname, lastname, salary, age, registerday, signintime
 FROM Users
 WHERE registerday = (SELECT registerday FROM Users WHERE username = ?)
 ORDER BY username;
 
--- 10. Find users registered today according to the MySQL server date.
+-- Users who registered today
 SELECT username, firstname, lastname, salary, age, registerday, signintime
 FROM Users WHERE registerday = CURDATE() ORDER BY username;

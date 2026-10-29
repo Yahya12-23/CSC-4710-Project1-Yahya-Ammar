@@ -1,4 +1,4 @@
-// Requirements 6–10: age and registration-date searches.
+// Searches by age and by registration date.
 const express = require('express');
 const db = require('../dbService');
 const { textField, validateAgeRange } = require('../lib/input');
@@ -6,7 +6,7 @@ const { requireAuth } = require('../middleware/auth');
 const router = express.Router();
 router.use(requireAuth);
 
-// Req. 6: search by inclusive age range.
+// users between two ages
 router.get('/age', async (req, res) => {
   const result = validateAgeRange(req.query);
   if (result.error) return res.status(400).json({ error: result.error });
@@ -15,7 +15,7 @@ router.get('/age', async (req, res) => {
   res.json({ data: users });
 });
 
-// Req. 7: find users who registered after the specified user's registration day.
+// users who registered after a given user
 router.get('/registered-after', async (req, res) => {
   const username = textField(req.query.username);
   if (!username || username.length > 50) {
@@ -25,13 +25,13 @@ router.get('/registered-after', async (req, res) => {
   res.json({ data: users });
 });
 
-// Req. 8: users with no recorded successful sign-in.
+// users who never signed in
 router.get('/never-signed-in', async (_req, res) => {
   const users = await db.searchNeverSignedIn();
   res.json({ data: users });
 });
 
-// Req. 9: find users who registered on the specified user's registration day.
+// users who registered the same day as a given user
 router.get('/registered-same-day', async (req, res) => {
   const username = textField(req.query.username);
   if (!username || username.length > 50) {
@@ -41,7 +41,7 @@ router.get('/registered-same-day', async (req, res) => {
   res.json({ data: users });
 });
 
-// Req. 10: find users registered today according to the MySQL server date.
+// users who registered today
 router.get('/registered-today', async (_req, res) => {
   const users = await db.searchRegisteredToday();
   res.json({ data: users });

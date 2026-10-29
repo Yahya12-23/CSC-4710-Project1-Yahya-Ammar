@@ -1,6 +1,8 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { validateRegistration, validateSalaryRange } = require('../lib/input');
+const {
+  validateRegistration, validateAgeRange, validateSalaryRange
+} = require('../lib/input');
 
 const user = {
   username: 'john', password: 'SafePass123!', firstname: 'John',
@@ -21,6 +23,19 @@ test('registration rejects weak passwords', () => {
 test('registration rejects invalid salary and age', () => {
   assert.ok(validateRegistration({ ...user, salary: '-100' }).error);
   assert.ok(validateRegistration({ ...user, age: '22.5' }).error);
+});
+
+test('age range accepts whole ages from 0 to 120', () => {
+  const result = validateAgeRange({ min: '18', max: '65' });
+  assert.deepEqual(result.value, { min: 18, max: 65 });
+});
+
+test('age range rejects missing, reversed or invalid bounds', () => {
+  assert.ok(validateAgeRange({ min: '', max: '100' }).error);
+  assert.ok(validateAgeRange({ min: '80', max: '20' }).error);
+  assert.ok(validateAgeRange({ min: '18.5', max: '65' }).error);
+  assert.ok(validateAgeRange({ min: '0; DROP TABLE Users', max: '65' }).error);
+  assert.ok(validateAgeRange({ min: '0', max: '121' }).error);
 });
 
 test('valid salary range is inclusive and ordered', () => {

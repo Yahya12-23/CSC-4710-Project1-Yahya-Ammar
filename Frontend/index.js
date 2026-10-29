@@ -1,3 +1,6 @@
+// Frontend for requirements 1–10. No React required.
+// If served by XAMPP Apache, API calls go to Node on port 5050.
+// If served by Node at :5050, API calls use the same origin.
 // Route requests through Express, whether the frontend runs on Apache or Node.
 const API_BASE = window.location.port === '5050' ? '' : 'http://localhost:5050';
 const $ = (selector) => document.querySelector(selector);
@@ -128,6 +131,42 @@ $('#search-salary-form').addEventListener('submit', async (event) => {
   await runSearch(`/api/users/salary?${query}`, 'Salary range search');
 });
 
+$('#search-age-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const fields = new FormData(event.currentTarget);
+  const query = new URLSearchParams({ min: fields.get('min'), max: fields.get('max') });
+  await runSearch(`/api/users/age?${query}`, 'Age range search');
+});
+
+$('#search-registered-after-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const username = new FormData(event.currentTarget).get('username');
+  await runSearch(
+    `/api/users/registered-after?${new URLSearchParams({ username })}`,
+    'Registered after search'
+  );
+});
+
+$('#search-never-signed-in-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  await runSearch('/api/users/never-signed-in', 'Never signed in search');
+});
+
+$('#search-registered-same-day-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const username = new FormData(event.currentTarget).get('username');
+  await runSearch(
+    `/api/users/registered-same-day?${new URLSearchParams({ username })}`,
+    'Same registration day search'
+  );
+});
+
+$('#search-registered-today-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  await runSearch('/api/users/registered-today', "Today's registrations search");
+});
+
+// Restore login UI on refresh while the server-side session is active.
 // Restore the active session after a refresh.
 (async () => {
   try {

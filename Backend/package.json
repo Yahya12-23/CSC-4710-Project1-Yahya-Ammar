@@ -1,8 +1,8 @@
 {
-  "name": "database-project1-first-five",
+  "name": "database-project1",
   "version": "1.0.0",
   "private": true,
-  "description": "User registration, login, and searches (requirements 1–5)",
+  "description": "User registration, login, and searches (requirements 1–10)",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

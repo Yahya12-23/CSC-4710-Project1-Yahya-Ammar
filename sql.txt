@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS Users (
     salary DECIMAL(12,2) NOT NULL,
     age INTEGER NOT NULL,
     registerday DATE NOT NULL,
+    registertime DATETIME NOT NULL,
     signintime DATETIME NULL DEFAULT NULL,
     INDEX idx_users_name (firstname, lastname),
     INDEX idx_users_salary (salary),
@@ -21,8 +22,8 @@ CREATE TABLE IF NOT EXISTS Users (
 
 -- Create a user account
 INSERT INTO Users
-  (username, password, firstname, lastname, salary, age, registerday, signintime)
-VALUES (?, ?, ?, ?, ?, ?, CURDATE(), NULL);
+  (username, password, firstname, lastname, salary, age, registerday, registertime, signintime)
+VALUES (?, ?, ?, ?, ?, ?, CURDATE(), NOW(), NULL);
 
 -- Retrieve password hash for login
 SELECT username, password FROM Users WHERE username = ?;
@@ -55,8 +56,8 @@ FROM Users WHERE age BETWEEN ? AND ? ORDER BY age, username;
 -- Users who registered after a given user
 SELECT username, firstname, lastname, salary, age, registerday, signintime
 FROM Users
-WHERE registerday > (SELECT registerday FROM Users WHERE username = ?)
-ORDER BY registerday, username;
+WHERE registertime > (SELECT registertime FROM Users WHERE username = ?)
+ORDER BY registertime, username;
 
 -- Users who never signed in
 SELECT username, firstname, lastname, salary, age, registerday, signintime

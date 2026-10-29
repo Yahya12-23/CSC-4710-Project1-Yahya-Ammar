@@ -56,4 +56,5 @@ These only check input validation, so MySQL does not need to be running.
 ## Notes
 
 - Sessions are kept in memory, so you get signed out when the server restarts.
-- Registration day is a `DATE`, so "registered after" compares days, not exact times.
+- Registration time is saved with each user, so "registered after" works even for people who sign up on the same day.
+- If you already made the `Users` table before this column existed, run `DROP TABLE Users;` and then `database/schema.sql` again.

@@ -1,4 +1,3 @@
-// All database queries. execute() with ? placeholders keeps user input out of the SQL.
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
@@ -18,8 +17,8 @@ const visibleColumns = 'username, firstname, lastname, salary, age, registerday,
 
 async function registerUser({ username, passwordHash, firstname, lastname, salary, age }) {
   const sql = `INSERT INTO Users
-    (username, password, firstname, lastname, salary, age, registerday, signintime)
-    VALUES (?, ?, ?, ?, ?, ?, CURDATE(), NULL)`;
+    (username, password, firstname, lastname, salary, age, registerday, registertime, signintime)
+    VALUES (?, ?, ?, ?, ?, ?, CURDATE(), NOW(), NULL)`;
   await pool.execute(sql, [username, passwordHash, firstname, lastname, salary, age]);
 }
 
@@ -76,8 +75,8 @@ async function searchByAgeRange(min, max) {
 async function searchRegisteredAfter(username) {
   const [rows] = await pool.execute(
     `SELECT ${visibleColumns} FROM Users
-     WHERE registerday > (SELECT registerday FROM Users WHERE username = ?)
-     ORDER BY registerday, username`,
+     WHERE registertime > (SELECT registertime FROM Users WHERE username = ?)
+     ORDER BY registertime, username`,
     [username]
   );
   return rows;

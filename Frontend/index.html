@@ -3,7 +3,6 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="User registration, login and directory search" />
   <title>User Database</title>
   <link rel="stylesheet" href="stylesheet.css" />
   <script src="index.js" defer></script>
@@ -12,13 +11,12 @@
   <header class="site-header">
     <div class="shell header-content">
       <a href="index.html" class="brand"><span class="brand-icon">DB</span> User Database</a>
-      <div class="header-right"><span class="pill">Project 1 · Requirements 1–10</span><span id="auth-indicator" class="auth-indicator">Not signed in</span></div>
-      <div class="header-right"><span class="pill">User Directory</span><span id="auth-indicator" class="auth-indicator">Not signed in</span></div>
+      <div class="header-right"><span id="auth-indicator" class="auth-indicator">Not signed in</span></div>
     </div>
   </header>
   <main class="shell">
     <div class="page-title">
-      <div><p class="eyebrow">NODE.JS · EXPRESS · MYSQL</p><h1>User Management</h1><p>Register an account, sign in, and search records stored in MySQL.</p></div>
+      <div><h1>User Database</h1><p>Register, sign in, and search the users in our database.</p></div>
     </div>
 
     <section class="account-grid" aria-label="Account forms">
@@ -48,7 +46,7 @@
           <button type="submit" class="button primary">Sign in</button>
           <p id="login-status" class="feedback" aria-live="polite"></p>
         </form>
-        <div class="login-note">Your password is stored securely.</div>
+        
         <div class="signed-in-panel" id="signed-in-panel" hidden>
           <span id="welcome-user"></span>
           <button type="button" class="button secondary" id="logout-button">Sign out</button>
@@ -57,8 +55,7 @@
     </section>
 
     <section class="card search-section" id="search-workspace" hidden>
-      <div class="card-heading"><span class="number">03–10</span><div><h2>Search users</h2><p>Search by name, user ID, salary, age, or registration and sign-in activity.</p></div></div>
-      <div class="card-heading"><div><h2>Search users</h2><p>Search with a first/last name, username (user ID), or salary range.</p></div></div>
+      <div class="card-heading"><div><h2>Search users</h2><p>Pick a search below to look through the users table.</p></div></div>
       <div class="search-grid">
         <form id="search-name-form" class="search-panel">
           <h3>Search by name</h3><p>Enter first name, last name, or both; partial matches work.</p>
@@ -82,7 +79,7 @@
           <button class="button outline" type="submit">Search salary</button>
         </form>
         <form id="search-age-form" class="search-panel">
-          <h3>06 · Search by age</h3><p>Find users between two ages, inclusive.</p>
+          <h3>Search by age</h3><p>Find users between two ages, inclusive.</p>
           <div class="fields two-col">
             <label>Minimum age <input name="min" type="number" min="0" max="120" step="1" placeholder="18" required /></label>
             <label>Maximum age <input name="max" type="number" min="0" max="120" step="1" placeholder="65" required /></label>
@@ -90,22 +87,22 @@
           <button class="button outline" type="submit">Search ages</button>
         </form>
         <form id="search-registered-after-form" class="search-panel">
-          <h3>07 · Registered after a user</h3><p>Find users who registered after this user's registration day.</p>
+          <h3>Registered after a user</h3><p>Find users who registered after this user did.</p>
           <div class="fields"><label>Username (user ID) <input name="username" maxlength="50" placeholder="e.g. john" required /></label></div>
           <button class="button outline" type="submit">Search later registrations</button>
         </form>
         <form id="search-never-signed-in-form" class="search-panel">
-          <h3>08 · Never signed in</h3><p>Find accounts with no recorded successful sign-in.</p>
-          <button class="button outline" type="submit">Search users</button>
+          <h3>Never signed in</h3><p>Find accounts that have never logged in.</p>
+                    <button class="button outline" type="submit">Show users</button>
         </form>
         <form id="search-registered-same-day-form" class="search-panel">
-          <h3>09 · Registered on the same day</h3><p>Find users who registered on this user's registration day.</p>
+          <h3>Registered the same day</h3><p>Find users who registered on the same day as this user.</p>
           <div class="fields"><label>Username (user ID) <input name="username" maxlength="50" placeholder="e.g. john" required /></label></div>
           <button class="button outline" type="submit">Search same day</button>
         </form>
         <form id="search-registered-today-form" class="search-panel">
-          <h3>10 · Registered today</h3><p>Find accounts created today according to the database date.</p>
-          <button class="button outline" type="submit">Search today's registrations</button>
+          <h3>Registered today</h3><p>Find accounts created today.</p>
+                    <button class="button outline" type="submit">Show users</button>
         </form>
       </div>
       <div class="results-heading"><h3>Search results <span id="result-count" class="count">0</span></h3><p id="results-status" aria-live="polite">Run a search to see matching users.</p></div>
@@ -116,10 +113,8 @@
       </div>
     </section>
 
-    <section class="locked-card" id="locked-message"><span class="lock-symbol">🔒</span><div><strong>Search is available after sign-in</strong><p>Create an account and sign in to test requirements 3–10.</p></div></section>
-    <footer class="footer"><span>CSC Database Project 1 · Requirements 1–10</span></footer>
-    <section class="locked-card" id="locked-message"><span class="lock-symbol">🔒</span><div><strong>Search is available after sign-in</strong><p>Create an account and sign in to search users.</p></div></section>
-    <footer class="footer"><span>CSC 4710 · User Database</span><a href="partner.html">Additional searches →</a></footer>
+    <section class="locked-card" id="locked-message"><span class="lock-symbol">🔒</span><div><strong>Search is available after sign-in</strong>    <p>Create an account and sign in to search users.</p></div></section>
+        <footer class="footer"><span>CSC 4710 · User Database</span></footer>
   </main>
 </body>
 </html>

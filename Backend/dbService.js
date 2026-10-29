@@ -1,6 +1,4 @@
-// Database queries used by our requirements 1–10.
-// mysql2.execute(sql, values) uses prepared statements to prevent SQL injection.
-// Database queries use prepared statements.
+// All database queries. execute() with ? placeholders keeps user input out of the SQL.
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
